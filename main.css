@@ -1,0 +1,11 @@
+body {
+	color: white;
+	background-image: url("./sinonfan.jpg");
+	background-size: cover;
+	font-family: Comic Sans, cursive;
+}
+
+body a{
+	color: green;
+	font-size: 1rem;
+}
