@@ -2,7 +2,7 @@ body {
 	color: white;
 	background-image: url("./sinonfan.jpg");
 	background-size: cover;
-	font-family: Comic Sans, cursive;
+	font-family: Comic Sans, Courier New, serif;
 }
 
 body a{
