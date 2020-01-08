@@ -1,12 +1,23 @@
 body {
-	color: black;
-	background-image: url("./animedesert.jpg");
+	color: white;
+	background-image: url("./sao.jpg");
 	background-size: cover;
-	background-color: ;
 	font-family: Comic Sans, Courier New, serif;
+	
 }
 
+
 body a{
-	color: #233d3d;
+	color: #bcebc8;
 	font-size: 1rem;
 }
+
+.navigation a{
+	color: black;
+	font-size: 32px;
+	padding: 50px;
+	margin: 50px;
+	background-color: white;
+	opacity: .4;
+	
+}	
