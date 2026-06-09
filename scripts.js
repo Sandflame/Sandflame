@@ -1,11 +1,11 @@
 const carouselItems = [
-	{ label: "Monogatari Series", color: "#0d3020" },
-	{ label: "MuvLuv Alternative", color: "#0d1a2a" },
-	{ label: "Thus Spoke Zarathustra", color: "#1a1008" },
-	{ label: "Dorian Gray", color: "#0a1a10" },
-	{ label: "Show 5", color: "#1a0d18" },
-	{ label: "Album", color: "#0d1a0d" },
-	{ label: "Show 7", color: "#1a1a0d" },
+	{ label: "Zoku Owarimonogatari", color: "#0d3020", image: "./images/zoku-owarimonogatari.jpg" },
+	{ label: "Puella Magi Madoka Magica", color: "#1a0d18", image: "./images/madoka-magica.jpg" },
+	{ label: "Hellsing Ultimate", color: "#1a0808", image: "./images/hellsing-ultimate.jpg" },
+	{ label: "Thus Spoke Zarathustra", color: "#1a1008", image: "./images/thus-spoke-zarathustra.jpg" },
+	{ label: "Show 5", color: "#1a0d18", image: "" },
+	{ label: "Album", color: "#0d1a0d", image: "" },
+	{ label: "Show 7", color: "#1a1a0d", image: "" },
 ];
 
 let carouselCurrent = 0;
@@ -27,7 +27,7 @@ const positions = [
 carouselItems.forEach((item, i) => {
 	const card = document.createElement('div');
 	card.className = 'c-card';
-	card.innerHTML = `<div class="c-card-inner" style="background:linear-gradient(180deg,${item.color} 0%,#060c08 100%);">${item.label}</div>`;
+	card.innerHTML = `<div class="c-card-inner" style="background:linear-gradient(180deg,${item.color} 0%,#060c08 100%);${item.image ? `background-image:url(${item.image});background-size:cover;background-position:center;` : ''}">${item.image ? '' : item.label}</div>`;
 	card.addEventListener('click', () => { carouselCurrent = i; carouselRender(); });
 	stage.appendChild(card);
 	cards.push(card);
