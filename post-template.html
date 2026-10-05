@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Sandflame | Books</title>
+		<title>Sandflame | Post title</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="./styles.css">
 		<link rel="stylesheet" href="./pages.css">
 	</head>
-	<body>
+	<body data-nav="writing.html">
 		<div class="container">
 			<header>
 				<div class="header-bg-image"></div>
@@ -81,45 +81,50 @@
 				</div>
 
 				<div class="content">
+					<!-- ============ POST TEMPLATE ============
+					     1. Copy this file and rename it (e.g. zarathustra-review.html).
+					     2. Change the <title> at the top, and the title, date and type below.
+					     3. Write inside <div class="prose">. The read time and the progress
+					        bar at the top of the window work themselves out.
+					     4. Link it from writing.html. -->
+					<div class="read-bar" id="read-bar"></div>
+
 					<div class="page-head">
-						<div class="page-path">~/sandflame/<span>books</span></div>
-						<div class="page-desc">the shelf. pull a book out to read the card.</div>
+						<div class="page-path">~/sandflame/writing/<span>post-title</span></div>
 					</div>
 
-					<!-- ============ THE CARD ============ (fills itself in when a book is clicked) -->
-					<div class="book-card" id="book-card" aria-live="polite"></div>
+					<article class="post">
+						<h1 class="post-title">Post title goes here</h1>
+						<div class="post-meta">
+							<span>2026-10-05</span>
+							<span class="tag">essay</span>
+							<span id="read-time"></span>
+						</div>
 
-					<!-- ============ THE SHELVES ============
-					     One <button class="spine"> per book:
-					       --h        how tall the book is (120px to 204px looks right)
-					       --c        the spine colour (keep it dark)
-					       class      add "wide" or "thin" to change thickness
-					       data-note  your note — this is what shows on the card
-					       data-link  optional: a link to your review
-					     Move a book between shelves by cutting and pasting its line. -->
-					<div class="label">reading now</div>
-					<div class="shelf-wrap"><div class="shelf">
-						<button class="spine wide" style="--h:176px; --c:#12301f" data-title="Thus Spoke Zarathustra" data-author="Friedrich Nietzsche" data-status="reading" data-note="[your one-line note on this book]" data-link="./writing.html" data-link-text="review (draft)">Thus Spoke Zarathustra</button>
-						<button class="spine thin" style="--h:132px; --c:#1f1a10" data-title="Dao De Jing" data-author="Laozi" data-status="reading" data-note="[your one-line note on this book]">Dao De Jing</button>
-					</div></div>
+						<div class="prose">
+							<p class="todo">write here. everything below shows the pieces you can use — keep what you need, delete the rest.</p>
 
-					<div class="label">have read</div>
-					<div class="shelf-wrap"><div class="shelf">
-						<button class="spine empty" style="--h:150px" disabled>add a book</button>
-						<button class="spine empty thin" style="--h:128px" disabled>add a book</button>
-						<button class="spine empty wide" style="--h:170px" disabled>add a book</button>
-					</div></div>
+							<p>A normal paragraph looks like this. Lines are kept short on purpose so long essays stay comfortable to read against the dark background.</p>
 
-					<div class="label">want to read</div>
-					<div class="shelf-wrap"><div class="shelf">
-						<button class="spine" style="--h:204px; --c:#2a1420" data-title="The Picture of Dorian Gray" data-author="Oscar Wilde" data-status="want to read" data-note="[your one-line note on this book]">The Picture of Dorian Gray</button>
-						<button class="spine wide" style="--h:168px; --c:#101c2a" data-title="Either/Or" data-author="Søren Kierkegaard" data-status="want to read" data-note="[your one-line note on this book]">Either/Or</button>
-						<button class="spine" style="--h:160px; --c:#12301f" data-title="Beyond Good and Evil" data-author="Friedrich Nietzsche" data-status="want to read" data-note="[your one-line note on this book]">Beyond Good and Evil</button>
-						<button class="spine wide" style="--h:178px; --c:#2a1a10" data-title="The Iliad" data-author="Homer" data-status="want to read" data-note="[your one-line note on this book]">The Iliad</button>
-						<button class="spine thin" style="--h:140px; --c:#1a1a1a" data-title="Vagabond, Vol. 2" data-author="Takehiko Inoue" data-status="want to read" data-note="[your one-line note on this book]">Vagabond, Vol. 2</button>
-						<button class="spine thin" style="--h:136px; --c:#2a1010" data-title="Rokka, Vol. 2" data-author="Ishio Yamagata" data-status="want to read" data-note="[your one-line note on this book]">Rokka, Vol. 2</button>
-						<button class="spine" style="--h:148px; --c:#1c1030" data-title="Monogatari novels" data-author="Nisio Isin" data-status="want to read" data-note="[your one-line note on this book]">Monogatari novels</button>
-					</div></div>
+							<h2>a section heading</h2>
+
+							<p>Another paragraph, with a <a href="./writing.html">link</a> in it.</p>
+
+							<blockquote>A pull quote or a line from whatever you are writing about.</blockquote>
+
+							<figure>
+								<img src="./images/zarathustra-review-home.jpg" alt="describe the image">
+								<figcaption>an image with a caption</figcaption>
+							</figure>
+
+							<p>The last paragraph.</p>
+						</div>
+					</article>
+
+					<div class="post-nav">
+						<a href="./writing.html">← back to the archive</a>
+						<a href="#">top ↑</a>
+					</div>
 				</div>
 			</div>
 		</div>

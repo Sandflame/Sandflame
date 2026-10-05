@@ -2,8 +2,10 @@
 <html>
 	<head>
 		<title>Sandflame | Music</title>
+		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="./styles.css">
+		<link rel="stylesheet" href="./pages.css">
 	</head>
 	<body>
 		<div class="container">
@@ -79,10 +81,318 @@
 				</div>
 
 				<div class="content">
-					<!-- PAGE CONTENT GOES HERE -->
+					<div class="page-head">
+						<div class="page-path">~/sandflame/<span>music</span></div>
+						<div class="page-desc">how my taste got here. the page is the essay — scroll, or jump along the signal.</div>
+					</div>
+
+					<!-- ============ THE SIGNAL ============
+					     Builds itself: one block of bars per <section class="era"> below.
+					     It stays at the top while you scroll and lights up the era you are in. -->
+					<div class="signal">
+						<div class="sig-bars" id="sig-bars"></div>
+						<div class="sig-read"><span>now playing: <b id="sig-name"></b></span><span id="sig-no"></span></div>
+					</div>
+
+					<div class="box">
+						<div class="prose">
+							<p class="todo">write here: the opening of the essay.</p>
+						</div>
+					</div>
+
+					<!-- ============ THE ERAS ============
+					     One <section class="era"> per part of the essay. Each has:
+					       - a title (rename freely; the signal picks it up)
+					       - artist tags
+					       - your writing, inside <div class="prose">
+					       - a tracklist: <li><span>song</span><span class="artist">artist</span></li>
+					         (wrap the song in <a href="..."> to link it)
+					       - four album art slots: put <img src="./images/..."> inside an "art" box
+					     Add, remove or reorder sections however the essay needs. -->
+
+					<section class="era" id="era-01">
+						<div class="era-head"><span class="era-no">[01]</span><h2 class="era-title">background noise</h2></div>
+						<div class="era-artists"><span class="tag">Queen</span><span class="tag">The Beatles</span><span class="tag">The Beach Boys</span><span class="tag">Tom Petty</span><span class="tag">Bruce Springsteen</span><span class="tag">Led Zeppelin</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
+
+					<section class="era" id="era-02">
+						<div class="era-head"><span class="era-no">[02]</span><h2 class="era-title">the kid who didn't care</h2></div>
+						<div class="era-artists"><span class="tag">add artists</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
+
+					<section class="era" id="era-03">
+						<div class="era-head"><span class="era-no">[03]</span><h2 class="era-title">nightcore</h2></div>
+						<div class="era-artists"><span class="tag">Krewella</span><span class="tag">Sia</span><span class="tag">Lana Del Rey</span><span class="tag">Panic! At The Disco</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li><span>Senbonzakura</span><span class="artist">artist</span></li>
+							<li><span>Courtesy Call</span><span class="artist">Thousand Foot Krutch</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
+
+					<section class="era" id="era-04">
+						<div class="era-head"><span class="era-no">[04]</span><h2 class="era-title">naruto shippuden</h2></div>
+						<div class="era-artists"><span class="tag">add artists</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
+
+					<section class="era" id="era-05">
+						<div class="era-head"><span class="era-no">[05]</span><h2 class="era-title">openings and endings</h2></div>
+						<div class="era-artists"><span class="tag">LiSA</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li><span>Crossing Field</span><span class="artist">LiSA</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
+
+					<section class="era" id="era-06">
+						<div class="era-head"><span class="era-no">[06]</span><h2 class="era-title">reol</h2></div>
+						<div class="era-artists"><span class="tag">Reol</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li><span>Yoiyoi Kokon</span><span class="artist">Reol</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
+
+					<section class="era" id="era-07">
+						<div class="era-head"><span class="era-no">[07]</span><h2 class="era-title">the deep dive</h2></div>
+						<div class="era-artists"><span class="tag">Aimer</span><span class="tag">Butaotome</span><span class="tag">Reol</span><span class="tag">LiSA</span><span class="tag">EGOIST</span><span class="tag">DECO*27</span><span class="tag">girl in red</span><span class="tag">beabadoobee</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
+
+					<section class="era" id="era-08">
+						<div class="era-head"><span class="era-no">[08]</span><h2 class="era-title">late nights</h2></div>
+						<div class="era-artists"><span class="tag">Pink Floyd</span><span class="tag">202</span><span class="tag">YeYe</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
+
+					<section class="era" id="era-09">
+						<div class="era-head"><span class="era-no">[09]</span><h2 class="era-title">lexie liu</h2></div>
+						<div class="era-artists"><span class="tag">Lexie Liu</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
+
+					<section class="era" id="era-10">
+						<div class="era-head"><span class="era-no">[10]</span><h2 class="era-title">ryujin</h2></div>
+						<div class="era-artists"><span class="tag">ITZY</span><span class="tag">(G)I-DLE</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
+
+					<section class="era" id="era-11">
+						<div class="era-head"><span class="era-no">[11]</span><h2 class="era-title">k-rnb</h2></div>
+						<div class="era-artists"><span class="tag">BIBI</span><span class="tag">Heize</span><span class="tag">youra</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
+
+					<section class="era" id="era-12">
+						<div class="era-head"><span class="era-no">[12]</span><h2 class="era-title">without words</h2></div>
+						<div class="era-artists"><span class="tag">Bach</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
+
+					<section class="era" id="era-13">
+						<div class="era-head"><span class="era-no">[13]</span><h2 class="era-title">four concerts</h2></div>
+						<div class="era-artists"><span class="tag">(G)I-DLE</span><span class="tag">Ado</span><span class="tag">Enno Cheng</span><span class="tag">Kumo99</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
+
+					<section class="era" id="era-14">
+						<div class="era-head"><span class="era-no">[14]</span><h2 class="era-title">the thread</h2></div>
+						<div class="era-artists"><span class="tag">add artists</span></div>
+						<div class="prose">
+							<p class="todo">write here.</p>
+						</div>
+						<ol class="tracks">
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+							<li class="blank"><span>song title</span><span class="artist">artist</span></li>
+						</ol>
+						<div class="art-row">
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+							<div class="art">album art</div>
+						</div>
+					</section>
 				</div>
 			</div>
 		</div>
-		<script src="./scripts.js"></script>
+		<script src="./pages.js"></script>
 	</body>
 </html>
