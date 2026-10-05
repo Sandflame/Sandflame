@@ -1331,6 +1331,19 @@ nav a.here {
 	line-height: 1.7;
 }
 
+/* anything that can be dragged with the mouse or swiped with a finger
+   (see addSwipe in the .js file). pan-y keeps normal up/down scrolling. */
+.swipeable {
+	touch-action: pan-y;
+	user-select: none;
+	-webkit-user-select: none;
+	cursor: grab;
+}
+
+.swipeable:active {
+	cursor: grabbing;
+}
+
 /* === SMALL SCREENS ================================================= */
 
 @media (max-width: 700px) {

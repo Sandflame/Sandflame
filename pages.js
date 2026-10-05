@@ -7,6 +7,32 @@
    whether its page is open and does nothing otherwise.
    ===================================================================== */
 
+/* --- drag with the mouse or swipe with a finger -----------------------
+   addSwipe(element, whatToDoOnSwipeLeft, whatToDoOnSwipeRight)          */
+function addSwipe(el, onLeft, onRight) {
+	let startX = null, startY = 0, swiped = false;
+	el.classList.add('swipeable');
+	el.addEventListener('pointerdown', e => {
+		if (e.pointerType === 'mouse' && e.button !== 0) return;
+		startX = e.clientX; startY = e.clientY; swiped = false;
+	});
+	window.addEventListener('pointerup', e => {
+		if (startX === null) return;
+		const dx = e.clientX - startX, dy = e.clientY - startY;
+		startX = null;
+		if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+		swiped = true;
+		setTimeout(() => { swiped = false; }, 50);
+		if (dx < 0) onLeft(); else onRight();
+	});
+	window.addEventListener('pointercancel', () => { startX = null; });
+	// a drag should not also count as a click on whatever was under it
+	el.addEventListener('click', e => {
+		if (swiped) { e.stopPropagation(); e.preventDefault(); swiped = false; }
+	}, true);
+	el.addEventListener('dragstart', e => e.preventDefault());
+}
+
 /* --- highlight the current page in both navs ----------------------- */
 (function () {
 	const here = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
@@ -243,6 +269,7 @@
 	document.getElementById('lb-close').addEventListener('click', close);
 	document.getElementById('lb-prev').addEventListener('click', () => show(current - 1));
 	document.getElementById('lb-next').addEventListener('click', () => show(current + 1));
+	addSwipe(document.querySelector('.lb-stage'), () => show(current + 1), () => show(current - 1));
 	lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('lb-stage')) close(); });
 	document.addEventListener('keydown', e => {
 		if (!lb.classList.contains('open')) return;

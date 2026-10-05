@@ -113,6 +113,40 @@ function galleryGoTo(i) {
 gPrev.addEventListener('click', () => galleryGoTo(galleryCurrent - 1));
 gNext.addEventListener('click', () => galleryGoTo(galleryCurrent + 1));
 
+/* --- drag with the mouse or swipe with a finger -----------------------
+   addSwipe(element, whatToDoOnSwipeLeft, whatToDoOnSwipeRight)          */
+function addSwipe(el, onLeft, onRight) {
+	let startX = null, startY = 0, swiped = false;
+	el.classList.add('swipeable');
+	el.addEventListener('pointerdown', e => {
+		if (e.pointerType === 'mouse' && e.button !== 0) return;
+		startX = e.clientX; startY = e.clientY; swiped = false;
+	});
+	window.addEventListener('pointerup', e => {
+		if (startX === null) return;
+		const dx = e.clientX - startX, dy = e.clientY - startY;
+		startX = null;
+		if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+		swiped = true;
+		setTimeout(() => { swiped = false; }, 50);
+		if (dx < 0) onLeft(); else onRight();
+	});
+	window.addEventListener('pointercancel', () => { startX = null; });
+	// a drag should not also count as a click on whatever was under it
+	el.addEventListener('click', e => {
+		if (swiped) { e.stopPropagation(); e.preventDefault(); swiped = false; }
+	}, true);
+	el.addEventListener('dragstart', e => e.preventDefault());
+}
+
+addSwipe(document.querySelector('.carousel-widget'),
+	() => { carouselCurrent = (carouselCurrent + 1) % carouselItems.length; carouselRender(); },
+	() => { carouselCurrent = (carouselCurrent - 1 + carouselItems.length) % carouselItems.length; carouselRender(); });
+
+addSwipe(document.querySelector('.gallery-widget'),
+	() => galleryGoTo(galleryCurrent + 1),
+	() => galleryGoTo(galleryCurrent - 1));
+
 /* --- phones: tap to show what hovering shows on a computer, tap again to hide --- */
 if (window.matchMedia('(hover: none)').matches) {
 	const completedCards = document.querySelectorAll('.completed-card');
