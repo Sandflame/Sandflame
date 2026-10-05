@@ -720,3 +720,99 @@ nav a:hover {
 	font-family: monospace;
 	z-index: 10;
 }
+/* =====================================================================
+   SMALL SCREENS (phones) — everything above is the desktop layout.
+   These rules only apply when the window is 700px wide or less.
+   ===================================================================== */
+
+@media (max-width: 700px) {
+	header {
+		height: 150px;
+	}
+
+	h1 {
+		font-size: 26px;
+		margin: 0 0 6px;
+	}
+
+	header p {
+		font-size: 13px;
+		margin: 0;
+	}
+
+	.header-bg-image {
+		background-size: 95% auto;
+	}
+
+	nav {
+		display: flex;
+		flex-wrap: wrap;
+		row-gap: 6px;
+		padding: 8px 6px;
+	}
+
+	nav a {
+		padding: 2px 8px;
+	}
+
+	/* sidebar moves above the content; its link list is hidden because
+	   the top nav already has the same links */
+	.body-wrapper {
+		display: block;
+	}
+
+	.sidebar {
+		width: auto;
+		min-height: 0;
+		border-right: none;
+		border-bottom: 1px solid #181a18;
+		padding: 10px 10px 2px;
+	}
+
+	.sidebar .panel:last-child {
+		display: none;
+	}
+
+	/* every row of widgets becomes a single column */
+	.writing-row,
+	.row-2,
+	.row-3 {
+		flex-direction: column;
+	}
+
+	.writing-card {
+		flex: none;
+		height: 80px;
+	}
+
+	.spotlight-img {
+		height: 170px;
+	}
+
+	.gallery-widget {
+		flex: none;
+		height: 260px;
+	}
+
+	.completed-card {
+		height: 150px;
+	}
+
+	.completed-name {
+		font-size: 11px;
+		text-align: center;
+	}
+}
+
+/* touch screens have no hover, so show the gallery controls all the time */
+@media (hover: none) {
+	.g-arrow,
+	.g-caption {
+		opacity: 1;
+	}
+
+	.g-arrow {
+		width: 28px;
+		height: 44px;
+	}
+}
