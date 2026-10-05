@@ -422,6 +422,7 @@ nav a.here {
 	transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
 }
 
+.ls-row.on .ls-blurb,
 .ls-row:hover .ls-blurb,
 .ls-row:focus .ls-blurb {
 	max-height: 60px;
@@ -1021,6 +1022,32 @@ nav a.here {
 .gal-tile:focus-visible .gal-cap {
 	opacity: 1;
 	transform: none;
+}
+
+/* phones have no hover: gallery captions stay visible, and archive previews
+   open with a tap (pages.js) instead */
+@media (hover: none) {
+	.gal-cap {
+		opacity: 1;
+		transform: none;
+	}
+
+	.ls-row:hover .ls-blurb,
+	.ls-row:focus .ls-blurb {
+		max-height: 0;
+		opacity: 0;
+		margin-top: 0;
+	}
+
+	.ls-row.on .ls-blurb {
+		max-height: 60px;
+		opacity: 1;
+		margin-top: 4px;
+	}
+
+	.spine:hover:not(.pulled) {
+		transform: none;
+	}
 }
 
 /* the viewer */

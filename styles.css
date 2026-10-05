@@ -436,13 +436,27 @@ nav a:hover {
 }
 
 
-.completed-card:hover .completed-overlay {
+/* shown on mouse hover (computers) or when tapped (phones — scripts.js adds "on") */
+.completed-card img {
+    transition: filter 0.3s ease;
+}
+
+.completed-card.on .completed-overlay {
     opacity: 1;
 }
 
-.completed-card:hover img {
+.completed-card.on img {
     filter: brightness(0.3);
-    transition: filter 0.3s ease;
+}
+
+@media (hover: hover) {
+    .completed-card:hover .completed-overlay {
+        opacity: 1;
+    }
+
+    .completed-card:hover img {
+        filter: brightness(0.3);
+    }
 }
 
 .completed-name {
@@ -806,8 +820,16 @@ nav a:hover {
 
 /* touch screens have no hover, so show the gallery controls all the time */
 @media (hover: none) {
-	.g-arrow,
-	.g-caption {
+	.g-arrow {
+		opacity: 1;
+	}
+
+	/* the caption is toggled by tapping the photo instead of hovering */
+	.gallery-widget:hover .g-caption {
+		opacity: 0;
+	}
+
+	.gallery-widget.on .g-caption {
 		opacity: 1;
 	}
 

@@ -112,3 +112,21 @@ function galleryGoTo(i) {
 
 gPrev.addEventListener('click', () => galleryGoTo(galleryCurrent - 1));
 gNext.addEventListener('click', () => galleryGoTo(galleryCurrent + 1));
+
+/* --- phones: tap to show what hovering shows on a computer, tap again to hide --- */
+if (window.matchMedia('(hover: none)').matches) {
+	const completedCards = document.querySelectorAll('.completed-card');
+	completedCards.forEach(card => {
+		card.addEventListener('click', () => {
+			const wasOn = card.classList.contains('on');
+			completedCards.forEach(c => c.classList.remove('on'));
+			if (!wasOn) card.classList.add('on');
+		});
+	});
+
+	const galleryWidget = document.querySelector('.gallery-widget');
+	galleryWidget.addEventListener('click', e => {
+		if (e.target.closest('.g-arrow, .g-dot')) return;
+		galleryWidget.classList.toggle('on');
+	});
+}

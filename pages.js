@@ -88,6 +88,18 @@
 	});
 })();
 
+/* --- WRITING on phones: first tap opens a row's preview, second tap follows the link
+       (or closes the preview if the piece isn't published yet) --------- */
+(function () {
+	if (!window.matchMedia('(hover: none)').matches) return;
+	const rows = document.querySelectorAll('.ls-row');
+	rows.forEach(row => row.addEventListener('click', e => {
+		const wasOn = row.classList.contains('on');
+		rows.forEach(r => r.classList.remove('on'));
+		if (!wasOn) { row.classList.add('on'); e.preventDefault(); }
+	}));
+})();
+
 /* --- WRITING: post template (reading bar + read time) -------------- */
 (function () {
 	const post = document.querySelector('.post');
