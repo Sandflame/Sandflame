@@ -126,22 +126,14 @@ nav a:hover {
 }
 
 .profile-avatar {
-	width: 40px;
-	height: 40px;
-	background-color: #0e0f0e;
-	border: 1px solid #1e2a20;
-	margin-bottom: 6px;
-}
-
-.profile-avatar {
     width: 40px;
     height: 40px;
     border: 1px solid #2a5a40;
-    margin: 0 auto 8px;
     position: relative;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(78, 207, 170, 0.2);
     animation: profileGlow 3s ease-in-out infinite;
+    flex-shrink: 0;
 }
 
 @keyframes profileGlow {
@@ -395,6 +387,7 @@ nav a:hover {
 	background-color: #0a0f0a;
 	border: 1px solid #2a5a40;
 	padding: 8px 6px 6px;
+	overflow: hidden;
 }
 
 
