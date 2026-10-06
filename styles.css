@@ -735,7 +735,7 @@ nav a:hover {
 	z-index: 10;
 }
 /* anything that can be dragged with the mouse or swiped with a finger
-   (see addSwipe in the .js file). pan-y keeps normal up/down scrolling. */
+   (see addDrag in the .js file). pan-y keeps normal up/down scrolling. */
 .swipeable {
 	touch-action: pan-y;
 	user-select: none;
@@ -743,8 +743,20 @@ nav a:hover {
 	cursor: grab;
 }
 
-.swipeable:active {
+.swipeable.grabbing,
+.swipeable.grabbing * {
 	cursor: grabbing;
+}
+
+/* while a drag is in progress the cards/photos must track the pointer
+   exactly, so their usual animation is switched off until release */
+.c-stage.dragging .c-card,
+.g-slides.dragging .g-slide {
+	transition: none;
+}
+
+.g-slides.settling .g-slide {
+	transition: transform 0.25s ease;
 }
 
 /* =====================================================================

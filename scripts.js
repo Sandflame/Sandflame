@@ -38,28 +38,32 @@ carouselItems.forEach((item, i) => {
 	dotsEl.appendChild(dot);
 });
 
-function carouselRender() {
+/* where a card sits at slot f (0 = far left, 3 = centre, 6 = far right).
+   f can be a fraction, so cards glide smoothly between slots while dragging. */
+function carouselSlot(f) {
+	const at = k => k < 0 ? { x: -150, s: 0.4, o: 0 } : k > 6 ? { x: 150, s: 0.4, o: 0 } : positions[k];
+	const lo = Math.floor(f), t = f - lo, a = at(lo), b = at(lo + 1);
+	return { x: a.x + (b.x - a.x) * t, s: a.s + (b.s - a.s) * t, o: a.o + (b.o - a.o) * t };
+}
+
+/* pos is which item is centred. Normally a whole number (carouselCurrent);
+   while dragging it is a fraction, e.g. 1.4 = partway between items 1 and 2. */
+function carouselRender(pos = carouselCurrent) {
 	const dots = dotsEl.querySelectorAll('.c-dot');
+	const n = carouselItems.length;
 	cards.forEach((card, i) => {
-		let offset = i - carouselCurrent;
-		const n = carouselItems.length;
-		if (offset > n / 2) offset -= n;
-		if (offset < -n / 2) offset += n;
-		const idx = offset + 3;
-		if (idx < 0 || idx > 6) {
-			card.style.opacity = 0;
-			card.style.pointerEvents = 'none';
-			return;
-		}
-		const p = positions[idx];
-		card.style.transform = `translateX(${p.x}px) translateY(${idx === 3 ? -8 : 0}px) scale(${p.s})`;
+		const offset = (((i - pos + n / 2) % n) + n) % n - n / 2;   // distance from centre, wrapped around
+		const p = carouselSlot(offset + 3);
+		const lift = 8 * Math.max(0, 1 - Math.abs(offset));
+		card.style.transform = `translateX(${p.x}px) translateY(${-lift}px) scale(${p.s})`;
 		card.style.opacity = p.o;
-		card.style.zIndex = Math.round(p.s * 10);
-		card.style.pointerEvents = 'auto';
-		card.className = 'c-card' + (idx === 3 ? ' cc' : '');
+		card.style.zIndex = Math.round(p.s * 100);
+		card.style.pointerEvents = p.o < 0.05 ? 'none' : 'auto';
+		card.className = 'c-card' + (Math.abs(offset) < 0.5 ? ' cc' : '');
 	});
-	dots.forEach((d, i) => d.classList.toggle('on', i === carouselCurrent));
-	infoEl.textContent = carouselItems[carouselCurrent].label;
+	const nearest = ((Math.round(pos) % n) + n) % n;
+	dots.forEach((d, i) => d.classList.toggle('on', i === nearest));
+	infoEl.textContent = carouselItems[nearest].label;
 }
 
 carouselRender();
@@ -113,39 +117,113 @@ function galleryGoTo(i) {
 gPrev.addEventListener('click', () => galleryGoTo(galleryCurrent - 1));
 gNext.addEventListener('click', () => galleryGoTo(galleryCurrent + 1));
 
-/* --- drag with the mouse or swipe with a finger -----------------------
-   addSwipe(element, whatToDoOnSwipeLeft, whatToDoOnSwipeRight)          */
-function addSwipe(el, onLeft, onRight) {
-	let startX = null, startY = 0, swiped = false;
+/* --- drag with the mouse or a finger, in real time ---------------------
+   addDrag(element, { start, move, end })
+     start()        runs once when a sideways drag begins (return false to refuse it)
+     move(dx)       runs continuously; dx = how far the pointer has moved, in px
+     end(dx, speed) runs on release; speed is px per millisecond (negative = leftwards) */
+function addDrag(el, handlers) {
+	let x0 = null, y0 = 0, active = false, moved = false, lastX = 0, lastT = 0, speed = 0;
 	el.classList.add('swipeable');
 	el.addEventListener('pointerdown', e => {
 		if (e.pointerType === 'mouse' && e.button !== 0) return;
-		startX = e.clientX; startY = e.clientY; swiped = false;
+		if (e.target.closest('button, .g-arrow, .g-dot, .c-dot')) return;
+		x0 = e.clientX; y0 = e.clientY; active = false; moved = false;
+		lastX = x0; lastT = e.timeStamp; speed = 0;
 	});
-	window.addEventListener('pointerup', e => {
-		if (startX === null) return;
-		const dx = e.clientX - startX, dy = e.clientY - startY;
-		startX = null;
-		if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
-		swiped = true;
-		setTimeout(() => { swiped = false; }, 50);
-		if (dx < 0) onLeft(); else onRight();
+	window.addEventListener('pointermove', e => {
+		if (x0 === null) return;
+		const dx = e.clientX - x0, dy = e.clientY - y0;
+		if (!active) {
+			if (Math.abs(dx) < 6) return;
+			if (Math.abs(dy) > Math.abs(dx)) { x0 = null; return; }   // it's a scroll, not a drag
+			if (handlers.start && handlers.start() === false) { x0 = null; return; }
+			active = true; moved = true;
+			el.classList.add('grabbing');
+		}
+		const dt = e.timeStamp - lastT;
+		if (dt > 0) speed = 0.7 * ((e.clientX - lastX) / dt) + 0.3 * speed;
+		speed = Math.max(-3, Math.min(3, speed));
+		lastX = e.clientX; lastT = e.timeStamp;
+		handlers.move(dx);
 	});
-	window.addEventListener('pointercancel', () => { startX = null; });
+	function finish(e) {
+		if (x0 === null) return;
+		const dx = e.clientX - x0;
+		x0 = null;
+		if (!active) return;
+		active = false;
+		el.classList.remove('grabbing');
+		if (e.timeStamp - lastT > 80) speed = 0;   // paused before letting go
+		handlers.end(dx, speed);
+		setTimeout(() => { moved = false; }, 50);
+	}
+	window.addEventListener('pointerup', finish);
+	window.addEventListener('pointercancel', finish);
 	// a drag should not also count as a click on whatever was under it
 	el.addEventListener('click', e => {
-		if (swiped) { e.stopPropagation(); e.preventDefault(); swiped = false; }
+		if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; }
 	}, true);
 	el.addEventListener('dragstart', e => e.preventDefault());
 }
 
-addSwipe(document.querySelector('.carousel-widget'),
-	() => { carouselCurrent = (carouselCurrent + 1) % carouselItems.length; carouselRender(); },
-	() => { carouselCurrent = (carouselCurrent - 1 + carouselItems.length) % carouselItems.length; carouselRender(); });
+/* carousel: the cards follow the pointer; on release the nearest card snaps to the centre */
+const CAROUSEL_DRAG_STEP = 55;   // px of dragging that moves the carousel by one card
+let carouselDragFrom = 0;
+addDrag(document.querySelector('.carousel-widget'), {
+	start() { carouselDragFrom = carouselCurrent; stage.classList.add('dragging'); },
+	move(dx) { carouselRender(carouselDragFrom - dx / CAROUSEL_DRAG_STEP); },
+	end(dx) {
+		const n = carouselItems.length;
+		const landing = carouselDragFrom - dx / CAROUSEL_DRAG_STEP;   // whichever card is nearest the centre wins
+		carouselCurrent = ((Math.round(landing) % n) + n) % n;
+		stage.classList.remove('dragging');
+		carouselRender();
+	},
+});
 
-addSwipe(document.querySelector('.gallery-widget'),
-	() => galleryGoTo(galleryCurrent + 1),
-	() => galleryGoTo(galleryCurrent - 1));
+/* gallery: the photo slides with the pointer and the next one follows it in */
+let galleryDragBusy = false;
+let galleryNeighbour = null;
+addDrag(document.querySelector('.gallery-widget'), {
+	start() {
+		if (galleryDragBusy || gSlideEls.length < 2) return false;
+		gSlides.classList.add('dragging');
+	},
+	move(dx) {
+		const n = gSlideEls.length, w = gSlides.clientWidth, dir = dx < 0 ? 1 : -1;
+		const ni = (galleryCurrent + dir + n) % n;
+		if (galleryNeighbour !== null && galleryNeighbour !== ni) {
+			gSlideEls[galleryNeighbour].style.opacity = '';
+			gSlideEls[galleryNeighbour].style.transform = '';
+		}
+		galleryNeighbour = ni;
+		gSlideEls[galleryCurrent].style.transform = `translateX(${dx}px)`;
+		gSlideEls[ni].style.opacity = 1;
+		gSlideEls[ni].style.transform = `translateX(${dx + dir * w}px)`;
+	},
+	end(dx, speed) {
+		const w = gSlides.clientWidth, dir = dx < 0 ? 1 : -1;
+		const flicked = Math.abs(speed) > 0.5 && Math.sign(speed) === Math.sign(dx);
+		const go = Math.abs(dx) > w * 0.25 || flicked;
+		const cur = gSlideEls[galleryCurrent], nb = gSlideEls[galleryNeighbour];
+		galleryDragBusy = true;
+		gSlides.classList.remove('dragging');
+		gSlides.classList.add('settling');
+		cur.style.transform = go ? `translateX(${-dir * w}px)` : 'translateX(0)';
+		nb.style.transform = go ? 'translateX(0)' : `translateX(${dir * w}px)`;
+		setTimeout(() => {
+			gSlides.classList.add('dragging');   // no animation while we tidy up
+			gSlides.classList.remove('settling');
+			if (go) galleryGoTo(galleryCurrent + dir);
+			[cur, nb].forEach(el => { el.style.transform = ''; el.style.opacity = ''; });
+			void gSlides.offsetWidth;
+			gSlides.classList.remove('dragging');
+			galleryNeighbour = null;
+			galleryDragBusy = false;
+		}, 260);
+	},
+});
 
 /* --- phones: tap to show what hovering shows on a computer, tap again to hide --- */
 if (window.matchMedia('(hover: none)').matches) {

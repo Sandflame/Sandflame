@@ -7,28 +7,52 @@
    whether its page is open and does nothing otherwise.
    ===================================================================== */
 
-/* --- drag with the mouse or swipe with a finger -----------------------
-   addSwipe(element, whatToDoOnSwipeLeft, whatToDoOnSwipeRight)          */
-function addSwipe(el, onLeft, onRight) {
-	let startX = null, startY = 0, swiped = false;
+/* --- drag with the mouse or a finger, in real time ---------------------
+   addDrag(element, { start, move, end })
+     start()        runs once when a sideways drag begins (return false to refuse it)
+     move(dx)       runs continuously; dx = how far the pointer has moved, in px
+     end(dx, speed) runs on release; speed is px per millisecond (negative = leftwards) */
+function addDrag(el, handlers) {
+	let x0 = null, y0 = 0, active = false, moved = false, lastX = 0, lastT = 0, speed = 0;
 	el.classList.add('swipeable');
 	el.addEventListener('pointerdown', e => {
 		if (e.pointerType === 'mouse' && e.button !== 0) return;
-		startX = e.clientX; startY = e.clientY; swiped = false;
+		if (e.target.closest('button, .g-arrow, .g-dot, .c-dot')) return;
+		x0 = e.clientX; y0 = e.clientY; active = false; moved = false;
+		lastX = x0; lastT = e.timeStamp; speed = 0;
 	});
-	window.addEventListener('pointerup', e => {
-		if (startX === null) return;
-		const dx = e.clientX - startX, dy = e.clientY - startY;
-		startX = null;
-		if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
-		swiped = true;
-		setTimeout(() => { swiped = false; }, 50);
-		if (dx < 0) onLeft(); else onRight();
+	window.addEventListener('pointermove', e => {
+		if (x0 === null) return;
+		const dx = e.clientX - x0, dy = e.clientY - y0;
+		if (!active) {
+			if (Math.abs(dx) < 6) return;
+			if (Math.abs(dy) > Math.abs(dx)) { x0 = null; return; }   // it's a scroll, not a drag
+			if (handlers.start && handlers.start() === false) { x0 = null; return; }
+			active = true; moved = true;
+			el.classList.add('grabbing');
+		}
+		const dt = e.timeStamp - lastT;
+		if (dt > 0) speed = 0.7 * ((e.clientX - lastX) / dt) + 0.3 * speed;
+		speed = Math.max(-3, Math.min(3, speed));
+		lastX = e.clientX; lastT = e.timeStamp;
+		handlers.move(dx);
 	});
-	window.addEventListener('pointercancel', () => { startX = null; });
+	function finish(e) {
+		if (x0 === null) return;
+		const dx = e.clientX - x0;
+		x0 = null;
+		if (!active) return;
+		active = false;
+		el.classList.remove('grabbing');
+		if (e.timeStamp - lastT > 80) speed = 0;   // paused before letting go
+		handlers.end(dx, speed);
+		setTimeout(() => { moved = false; }, 50);
+	}
+	window.addEventListener('pointerup', finish);
+	window.addEventListener('pointercancel', finish);
 	// a drag should not also count as a click on whatever was under it
 	el.addEventListener('click', e => {
-		if (swiped) { e.stopPropagation(); e.preventDefault(); swiped = false; }
+		if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; }
 	}, true);
 	el.addEventListener('dragstart', e => e.preventDefault());
 }
@@ -269,7 +293,36 @@ function addSwipe(el, onLeft, onRight) {
 	document.getElementById('lb-close').addEventListener('click', close);
 	document.getElementById('lb-prev').addEventListener('click', () => show(current - 1));
 	document.getElementById('lb-next').addEventListener('click', () => show(current + 1));
-	addSwipe(document.querySelector('.lb-stage'), () => show(current + 1), () => show(current - 1));
+	// the photo follows the pointer; let go past the threshold and the next one slides in
+	const SLIDE = 'transform 0.18s ease, opacity 0.18s ease';
+	addDrag(document.querySelector('.lb-stage'), {
+		start() { frame.style.transition = 'none'; },
+		move(dx) {
+			frame.style.transform = `translateX(${dx}px)`;
+			frame.style.opacity = Math.max(0.15, 1 - Math.abs(dx) / 450);
+		},
+		end(dx, speed) {
+			const dir = dx < 0 ? 1 : -1;
+			const flicked = Math.abs(speed) > 0.5 && Math.sign(speed) === Math.sign(dx);
+			frame.style.transition = SLIDE;
+			if (Math.abs(dx) < 80 && !flicked) {   // not far enough: spring back
+				frame.style.transform = '';
+				frame.style.opacity = '';
+				return;
+			}
+			frame.style.transform = `translateX(${dx - dir * 140}px)`;
+			frame.style.opacity = 0;
+			setTimeout(() => {
+				show(current + dir);
+				frame.style.transition = 'none';
+				frame.style.transform = `translateX(${dir * 140}px)`;
+				void frame.offsetWidth;
+				frame.style.transition = SLIDE;
+				frame.style.transform = '';
+				frame.style.opacity = '';
+			}, 180);
+		},
+	});
 	lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('lb-stage')) close(); });
 	document.addEventListener('keydown', e => {
 		if (!lb.classList.contains('open')) return;

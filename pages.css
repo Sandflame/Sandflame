@@ -1332,7 +1332,7 @@ nav a.here {
 }
 
 /* anything that can be dragged with the mouse or swiped with a finger
-   (see addSwipe in the .js file). pan-y keeps normal up/down scrolling. */
+   (see addDrag in the .js file). pan-y keeps normal up/down scrolling. */
 .swipeable {
 	touch-action: pan-y;
 	user-select: none;
@@ -1340,7 +1340,8 @@ nav a.here {
 	cursor: grab;
 }
 
-.swipeable:active {
+.swipeable.grabbing,
+.swipeable.grabbing * {
 	cursor: grabbing;
 }
 
